@@ -1,0 +1,119 @@
+.place-agencies-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.destination-header {
+  position: relative;
+  padding: 6rem 2rem;
+  border-radius: 30px;
+  color: white;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.15);
+  overflow: hidden;
+}
+
+.destination-header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.destination-header p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.header-tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.header-tags .tag {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+.agencies-content {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+.filter-sidebar {
+  padding: 1.5rem;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.filter-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+
+.budget-slider {
+  width: 100%;
+  accent-color: var(--accent-color);
+}
+
+.agencies-list h2 {
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.agencies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.empty-state {
+  padding: 3rem;
+  text-align: center;
+  color: var(--text-light);
+}
+
+@media (max-width: 900px) {
+  .agencies-content {
+    grid-template-columns: 1fr;
+  }
+  .filter-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .destination-header {
+    padding: 3rem 1rem;
+  }
+  .destination-header h1 {
+    font-size: 2rem;
+  }
+  .agencies-grid {
+    grid-template-columns: 1fr;
+  }
+}
