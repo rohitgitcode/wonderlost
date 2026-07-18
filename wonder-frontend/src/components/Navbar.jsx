@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="navbar-container">
           <Link to="/" className="navbar-logo">
             <PlaneTakeoff size={32} className="logo-icon" />
-            <span className="logo-text">Travel DE</span>
+            <span className="logo-text">Wonderlost</span>
           </Link>
           <div className="navbar-links">
             <Link to="/search" className="nav-link">Destinations</Link>
