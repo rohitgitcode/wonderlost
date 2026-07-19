@@ -12,6 +12,60 @@ const GhumakkadChat = () => {
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  
+  const [quizMode, setQuizMode] = useState(false);
+  const [quizStep, setQuizStep] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState({});
+  const [places, setPlaces] = useState([]);
+
+  const questions = [
+    { text: "What's your preferred climate?", options: ["Tropical", "Cool", "Moderate"] },
+    { text: "What vibe are you looking for?", options: ["Relaxing", "Intense", "Balanced"] },
+    { text: "What is your core activity focus?", options: ["Nature", "History", "Thrill", "Culture", "Beach"] },
+    { text: "What's your budget tier?", options: ["Low", "Medium", "High"] },
+    { text: "Who are you traveling with?", options: ["Solo", "Couple", "Family", "Friends"] }
+  ];
+
+  const handleQuizAnswer = (option) => {
+    setMessages(prev => [...prev, { sender: 'user', text: option }]);
+    
+    const newAnswers = { ...quizAnswers, [quizStep]: option };
+    setQuizAnswers(newAnswers);
+
+    if (quizStep < questions.length - 1) {
+       const nextQ = questions[quizStep + 1];
+       setMessages(prev => [...prev, { 
+         sender: 'bot', 
+         text: nextQ.text, 
+         type: 'quiz_question', 
+         options: nextQ.options 
+       }]);
+       setQuizStep(quizStep + 1);
+    } else {
+       setQuizMode(false);
+       setLoading(true);
+       
+       const selectedTags = Object.values(newAnswers);
+       const scoredPlaces = places.map(place => {
+         let matchCount = 0;
+         selectedTags.forEach(tag => {
+           if (place.tags.includes(tag)) matchCount++;
+         });
+         return { ...place, matchScore: Math.round((matchCount / questions.length) * 100) };
+       });
+
+       scoredPlaces.sort((a, b) => b.matchScore - a.matchScore);
+       const topMatches = scoredPlaces.slice(0, 3);
+       
+       setMessages(prev => [...prev, {
+          sender: 'bot',
+          text: "Based on your answers, here are my top recommendations for you!",
+          type: 'places',
+          data: topMatches
+       }]);
+       setLoading(false);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -24,6 +78,35 @@ const GhumakkadChat = () => {
   const handleSend = async (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
+
+    if (quizMode) {
+      const userText = inputText;
+      setInputText('');
+      handleQuizAnswer(userText);
+      return;
+    }
+
+    if (inputText.match(/(suggest|recommend|find).*(place|destination)/i)) {
+       setMessages(prev => [...prev, { sender: 'user', text: inputText }]);
+       setMessages(prev => [...prev, { 
+           sender: 'bot', 
+           text: "Sure! Let's do a quick quiz to find your perfect place. " + questions[0].text,
+           type: 'quiz_question',
+           options: questions[0].options
+       }]);
+       setQuizMode(true);
+       setQuizStep(0);
+       setQuizAnswers({});
+       setInputText('');
+       
+       if (places.length === 0) {
+           fetch('https://wonder-server.onrender.com/api/places')
+             .then(res => res.json())
+             .then(data => setPlaces(data))
+             .catch(console.error);
+       }
+       return;
+    }
 
     const userMessage = { sender: 'user', text: inputText };
     setMessages(prev => [...prev, userMessage]);
@@ -46,7 +129,7 @@ const GhumakkadChat = () => {
       }]);
     } catch (err) {
       console.error(err);
-      setMessages(prev => [...prev, { sender: 'bot', text: 'Oops! My backpack is too heavy right now. Try again later!' }]);
+      setMessages(prev => [...prev, { sender: 'bot', text: 'i cant answer this okyy' }]);
     }
     setLoading(false);
   };
@@ -74,6 +157,21 @@ const GhumakkadChat = () => {
                 <div className={`message ${msg.sender === 'user' ? 'message-user' : 'message-bot'}`}>
                   {msg.text}
                 </div>
+                
+                {msg.type === 'quiz_question' && msg.options && (
+                  <div className="quiz-options-container">
+                    {msg.options.map((opt, i) => (
+                      <button 
+                        key={i} 
+                        className="quiz-option-btn"
+                        onClick={() => handleQuizAnswer(opt)}
+                        disabled={!quizMode}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
                 
                 {/* Render Cards if data exists */}
                 {msg.sender === 'bot' && msg.data && msg.data.length > 0 && (

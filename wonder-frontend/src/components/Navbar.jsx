@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { PlaneTakeoff, UserPlus, Heart, X, Trash2 } from 'lucide-react';
+import { PlaneTakeoff, UserPlus, Heart, X, Trash2, Menu } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [savedPlaces, setSavedPlaces] = useState([]);
   const [savedAgencies, setSavedAgencies] = useState([]);
 
@@ -40,14 +41,19 @@ const Navbar = () => {
             <PlaneTakeoff size={32} className="logo-icon" />
             <span className="logo-text">Wonderlost</span>
           </Link>
-          <div className="navbar-links">
-            <Link to="/search" className="nav-link">Destinations</Link>
-            <Link to="/quiz" className="nav-link">Travel Quiz</Link>
-            <button className="nav-link icon-btn" onClick={() => setDrawerOpen(true)}>
+          
+          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+
+          <div className={`navbar-links ${mobileMenuOpen ? 'active' : ''}`}>
+            <Link to="/search" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Destinations</Link>
+            <Link to="/quiz" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Travel Quiz</Link>
+            <button className="nav-link icon-btn" onClick={() => { setDrawerOpen(true); setMobileMenuOpen(false); }}>
               <Heart size={20} className="heart-nav-icon" /> Dream Itinerary
             </button>
-            <Link to="/register-agency" className="nav-btn">
-              <UserPlus size={18} /> Register Agency
+            <Link to="/register-agency" className="nav-btn" onClick={() => setMobileMenuOpen(false)}>
+              <UserPlus size={18} /> <span>Register Agency</span>
             </Link>
           </div>
         </div>

@@ -24,6 +24,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .navbar-logo {
@@ -235,6 +236,14 @@
   font-size: 0.9rem;
 }
 
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dark);
+}
+
 @media (max-width: 768px) {
   .navbar-container {
     padding: 0.8rem 1rem;
@@ -242,10 +251,30 @@
   .logo-text {
     font-size: 1.4rem;
   }
+  .mobile-menu-btn {
+    display: block;
+  }
   .navbar-links {
-    gap: 0.5rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    padding: 1.5rem 0;
+    gap: 1.5rem;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    transition: clip-path 0.4s ease-in-out;
+    border-radius: 0 0 24px 24px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+  .navbar-links.active {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
   .nav-btn span {
-    display: none;
+    display: inline;
   }
 }

@@ -129,7 +129,7 @@ exports.processChat = async (req, res) => {
 
     // 5. Fallback (Anti-Hallucination)
     return res.json({
-      reply: "That's a bit out of my context! But I'm Ghumakkad, your friendly travel buddy. Try asking me for 'historic places' or 'agencies that provide transport'.",
+      reply: "i cant answer this okyy",
       type: 'text'
     });
 
