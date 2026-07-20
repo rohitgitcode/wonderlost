@@ -39,7 +39,7 @@ const Navbar = () => {
         <div className="navbar-container">
           <Link to="/" className="navbar-logo">
             <PlaneTakeoff size={32} className="logo-icon" />
-            <span className="logo-text">Wonderlust</span>
+            <span className="logo-text">Wanderlust</span>
           </Link>
           
           <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
